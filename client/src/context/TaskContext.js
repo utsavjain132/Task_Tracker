@@ -31,33 +31,33 @@ export const TaskProvider = ({ children }) => {
   };
 
   // Create task
-  const createTask = async (taskData) => {
-    try {
-      const { data } = await api.post('/tasks', taskData);
-      setTasks([data, ...tasks]);
-      toast.success('Task created successfully!');
-      return data;
-    } catch (error) {
-      const message = error.response?.data?.message || 'Failed to create task';
-      toast.error(message);
-      throw error;
-    }
-  };
-
-  // Update task
-  const updateTask = async (id, taskData) => {
-    try {
-      const { data } = await api.put(`/tasks/${id}`, taskData);
-      setTasks(tasks.map((task) => (task._id === id ? data : task)));
-      toast.success('Task updated successfully!');
-      return data;
-    } catch (error) {
-      const message = error.response?.data?.message || 'Failed to update task';
-      toast.error(message);
-      throw error;
-    }
-  };
-
+const createTask = async (taskData) => {
+  try {
+    const { data } = await api.post('/tasks', taskData);
+    // Refresh tasks from server instead of manually adding
+    await getTasks();
+    toast.success('Task created successfully!');
+    return data;
+  } catch (error) {
+    const message = error.response?.data?.message || 'Failed to create task';
+    toast.error(message);
+    throw error;
+  }
+};
+// Update task
+const updateTask = async (id, taskData) => {
+  try {
+    const { data } = await api.put(`/tasks/${id}`, taskData);
+    // Refresh tasks from server
+    await getTasks();
+    toast.success('Task updated successfully!');
+    return data;
+  } catch (error) {
+    const message = error.response?.data?.message || 'Failed to update task';
+    toast.error(message);
+    throw error;
+  }
+};
   // Delete task
   const deleteTask = async (id) => {
     try {
