@@ -62,7 +62,7 @@ export default function RegisterPage() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 className="input-field"
-                placeholder="John Doe"
+                placeholder="Name"
                 required
               />
             </div>
